@@ -124,7 +124,7 @@ class BaseAPI(object):
             [all_data.append(item) for item in data.get("data")]
 
         return all_data
-    
+
     def fetch_data(self, endpoint, type=GET, params=None):
         """Make a get call - this method handles pagination.
         """
@@ -138,7 +138,8 @@ class BaseAPI(object):
         
         # make the request
         r = self._make_request(endpoint, type, params)
-        print(r.text)
+        print(r)
+
         # check for errors
         if r.status_code == 404:
             raise NotFoundError()
@@ -154,7 +155,7 @@ class BaseAPI(object):
 
         if not r.ok:
             raise DataReadError("Could not retrieve data from roboat-enviro.com")
-        
+
         # deal with pagination if needed
         pages = data.get("meta", None)
         if pages is not None:
@@ -162,7 +163,7 @@ class BaseAPI(object):
                 data = self._deal_with_pagination(endpoint, type, params, data)
             else:
                 data = data.get("data")
-    
+
         return data
 
     def __str__(self):
