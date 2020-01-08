@@ -12,7 +12,6 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         >>> api = roboatenviro.legacy.RoboatEnviro()
         >>> api.get_accounts()
 
@@ -40,7 +39,6 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         Get a list of all sensors:
 
         >>> api = quantaq.legacy.QuantAQ()
@@ -53,7 +51,6 @@ class RoboatEnviro(BaseAPI):
         Get a list of all sensors, but limit to just 2 sensors:
 
         >>> api.get_sensors(params=dict(limit=2))
-
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
 
@@ -70,7 +67,6 @@ class RoboatEnviro(BaseAPI):
 
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.get_sensor(sn="SN001")
-
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
         
@@ -96,7 +92,6 @@ class RoboatEnviro(BaseAPI):
         
         Examples
         --------
-
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.update_sensor(sn="SN001", params=dict(city="cambridge"))
         """
@@ -112,10 +107,8 @@ class RoboatEnviro(BaseAPI):
         
         Examples
         --------
-
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.delete_sensor(sn="SN001")
-
         """
         return self.fetch_data("sensors/{}".format(sn), type=DELETE)
 
@@ -135,10 +128,58 @@ class RoboatEnviro(BaseAPI):
         Examples
         --------
         >>> api = quantaq.legacy.QuantAQ()
-        >>> api.add_sensor(params=dict(sn="SN000-001", model="arisense_v200", city="cambridge"))
-
+        >>> api.add_sensor(params=dict(sn="SN001", ... ,blah="blah"))
         """
         return self._make_request("sensors/", type=POST, **kwargs)
+
+    def add_trf_scan_set(self, **kwargs):
+        """Add new trf scan set.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        Examples
+        --------
+        >>> api = quantaq.legacy.QuantAQ()
+        >>> api.add_trf_scan_set(params=dict(sn="SN001", ... ,blah="blah"))
+        """
+        return self._make_request("trf-scan-sets/", type=POST, **kwargs)
+
+    def get_trf_scan_set(self, sn, return_type="json", id=None, **kwargs):
+        """Return a list of trf scan sets for a given sensor.
+
+        Parameters
+        ----------
+        sn: string, required
+            The sensor SN you would like data for
+        return_type: string, required
+            Return a list of json objects if set to 'json', or a dataframe if set to 'dataframe'
+        id: int
+            You can retrieve an individual scan sets by its ID.
+        params: dict, optional
+            Query based on any column or parameter - see utils for further discussion.
+
+        Returns
+        -------
+        list or dataframe
+
+        Examples
+        --------
+        >>> api.get_trf_scan_set(sn='<sn>', params=dict(limit=25))
+        """
+        assert(return_type in ("json", "dataframe")), "Bad return_type"
+        endpoint = "trf-scan-sets/"
+        
+        if id is not None:
+            return self.fetch_data(endpoint + str(id), **kwargs)
+
+        data = self.fetch_data(endpoint, **kwargs)
+        if return_type == "dataframe":
+            data = list_to_dataframe(data)
+        return data
 
     def add_trf_data(self, **kwargs):
         """Add new trf data.
@@ -153,9 +194,7 @@ class RoboatEnviro(BaseAPI):
         --------
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.add_trf_data(params=dict(sn="SN001", ... ,blah="blah"))
-
         """
-        #raise NotImplementedError("This method is not yet implemented.")
         return self._make_request("raw-trf-data/", type=POST, **kwargs)
 
     def delete_trf_data(self, sn, id, **kwargs):
@@ -175,7 +214,6 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         """
         return self.fetch_data("sensors/{}/data/raw/{}".format(sn, id), type=DELETE)
 
@@ -199,9 +237,7 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         >>> api.get_trf_data(sn='<sn>', params=dict(limit=25))
-
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
         endpoint = "raw-trf-data/"
@@ -227,7 +263,6 @@ class RoboatEnviro(BaseAPI):
         --------
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.add_ssf_data(params=dict(sn="SN001", ... ,blah="blah"))
-
         """
         return self._make_request("raw-ssf-data", type=POST, **kwargs)
 
@@ -248,7 +283,6 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         """
         return self.fetch_data("sensors/{}/data/raw/{}".format(sn, id), type=DELETE)
 
@@ -272,9 +306,7 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
-
         >>> api.get_ssf_data(sn='<sn>', params=dict(limit=25))
-
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
         endpoint = "raw-ssf-data/"
@@ -287,13 +319,11 @@ class RoboatEnviro(BaseAPI):
             data = list_to_dataframe(data)
         return data
 
-    def get_logs(self, sn, return_type="json", **kwargs):
-        """Return a list of logs for sensor SN.
+    def get_sensor_logs(self, return_type="json", **kwargs):
+        """Return a list of sensor logs.
 
         Parameters
         ----------
-        sn: string, required
-            The sensor SN you would like data for
         return_type: string, required
             Return a list of json objects if set to 'json', or a dataframe if set to 'dataframe'
         params: dict, optional
@@ -305,15 +335,17 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
+        Get a list of all deployments:
 
+        >>> api = quantaq.legacy.QuantAQ()
+        >>> api.get_sensor_logs()
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
-
-        data = self.fetch_data("log/{}/".format(sn), **kwargs)
+        data = self.fetch_data("sensor-logs")
         if return_type == "dataframe":
             data = list_to_dataframe(data)
         return data
-    '''
+
     def add_deployment(self, sn, return_type="json", **kwargs):
         """Add new deployment.
 
@@ -327,7 +359,6 @@ class RoboatEnviro(BaseAPI):
         --------
         >>> api = quantaq.legacy.QuantAQ()
         >>> api.add_deployment(params=dict(sn="SN001", ... ,blah="blah"))
-
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
         endpoint = "deployments/"
@@ -339,7 +370,8 @@ class RoboatEnviro(BaseAPI):
         if return_type == "dataframe":
             data = list_to_dataframe(data)
         return data
-
+    
+    '''
     def update_deployment(self, sn, **kwargs):
         """Update a deployment.
 
@@ -364,13 +396,11 @@ class RoboatEnviro(BaseAPI):
         return self.fetch_data("deployments/{}".format(sn), type=PUT, **kwargs)
     '''
 
-    def get_deployments(self, sn, return_type="json", **kwargs):
-        """Return a list of logs for sensor SN.
+    def get_deployments(self, return_type="json", **kwargs):
+        """Return a list of deployments.
 
         Parameters
         ----------
-        sn: string, required
-            The sensor SN you would like data for
         return_type: string, required
             Return a list of json objects if set to 'json', or a dataframe if set to 'dataframe'
         params: dict, optional
@@ -382,15 +412,13 @@ class RoboatEnviro(BaseAPI):
 
         Examples
         --------
+        Get a list of all deployments:
 
+        >>> api = quantaq.legacy.QuantAQ()
+        >>> api.get_deployments()
         """
         assert(return_type in ("json", "dataframe")), "Bad return_type"
-        endpoint = "deployments/"
-        
-        if id is not None:
-            return self.fetch_data(endpoint + str(id), **kwargs)
-        
-        data = self.fetch_data(endpoint, **kwargs)
+        data = self.fetch_data("deployments")
         if return_type == "dataframe":
             data = list_to_dataframe(data)
         return data
