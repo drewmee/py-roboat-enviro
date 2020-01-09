@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import requests
 import logging
@@ -147,7 +146,9 @@ class BaseAPI(object):
             raise NotPermittedError()
         if r.status_code == 400:
             raise BadRequestError()
-        
+        if r.status_code == 204:
+            return None
+
         try:
             data = r.json()
         except ValueError:
