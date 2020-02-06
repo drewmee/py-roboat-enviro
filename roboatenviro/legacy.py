@@ -469,7 +469,7 @@ class RoboatEnviro(BaseAPI):
         >>> api = roboatenviro.RoboatEnviro()
         >>> api.add_ssf_data(params=dict(sn="SN001", ... ,blah="blah"))
         """
-        return self._make_request("raw-ssf-data", type=POST, **kwargs)
+        return self._make_request("raw-ssf-data/", type=POST, **kwargs)
 
     #TODO
     #def delete_ssf_data():
