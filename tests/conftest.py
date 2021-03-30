@@ -13,6 +13,9 @@ def load_env():
 
 @pytest.fixture(scope="session", autouse=True)
 def api_client(load_env):
-    token_auth = ApiTokenHeader("api-key", os.environ["API_KEY"])
-    api = RoboatEnviroData(os.environ["API_URL"], auth=token_auth)
+    # token_auth = ApiTokenHeader("api-key", os.environ["PROD_API_KEY"])
+    # url = "https://roboat-enviro.herokuapp.com/api/"
+    token_auth = ApiTokenHeader("api-key", os.environ["DEV_API_KEY"])
+    url = "http://localhost:5000/api/"
+    api = RoboatEnviroData(url, auth=token_auth)
     return api
