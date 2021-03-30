@@ -30,4 +30,4 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           pip install -e ".[docs, jupyter]"
       - name: Build documentation
-        run: make -C docs/ build
+        run: make -C docs/ html
