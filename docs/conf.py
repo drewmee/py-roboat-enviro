@@ -31,6 +31,7 @@ author = "Drew Meyers"
 extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "nbsphinx",
     "sphinx_copybutton",
 ]

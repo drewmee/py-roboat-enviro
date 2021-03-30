@@ -7,10 +7,10 @@ Py-Roboat-Enviro is a python wrapper for the Roboat environmental data
 RESTful API.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   modules
+   py_roboat_enviro
 
    Py-Roboat-Enviro @ GitHub <https://github.com/drewmee/py-roboat-enviro>
    Py-Roboat-Enviro @ PyPI <https://pypi.org/project/py-roboat-enviro/>
