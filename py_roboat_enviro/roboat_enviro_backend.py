@@ -2,8 +2,6 @@ import json
 
 from uplink import *
 
-from roboat_enviro_backend.schemas import UserSchema
-
 
 class RoboatEnviroData(Consumer):
     """Client for the Roboat Environmental Data API
@@ -12,13 +10,11 @@ class RoboatEnviroData(Consumer):
         Consumer (uplink.Consumer): Base consumer class with which to define custom consumers.
     """
 
-    # @returns.json(UserSchema)
     @get("users")
     def get_users(self):
         """List all users."""
         return
 
-    # @returns.json(UserSchema)
     @get("users/{user_id}")
     def get_user_by_id(self, user_id: Path):
         """Get user by ID.
@@ -28,7 +24,6 @@ class RoboatEnviroData(Consumer):
         """
         return
 
-    # @returns.json(UserSchema(many=True))
     @post("users/search?filters={filters}")
     def search_users(self, filters):
         """Search users.

@@ -1,14 +1,8 @@
 import json
 
 import pytest
-from roboat_enviro_backend import db
-from roboat_enviro_backend.schemas import SensorSchema, UserSchema
 
 from .utils import generate_random_name
-
-
-def test_hehe():
-    assert 1 == 1
 
 
 class TestUsers:
@@ -21,19 +15,11 @@ class TestUsers:
         response = self.api_client.get_users()
         assert response.ok
         assert response.json()
-        """
-        users = UserSchema().load(
-            response.json(), many=True, partial=True, transient=True
-        )
-        assert users
-        """
 
     def test_get_user_by_id(self):
         response = self.api_client.get_user_by_id(self.user_id)
         assert response.ok
         assert response.json()
-        user = UserSchema().load(response.json(), partial=True, transient=True)
-        assert user.id == self.user_id
 
     def test_search_users(self):
         filters = [{"field": "id", "op": "<", "value": self.user_id + 1}]
@@ -41,12 +27,6 @@ class TestUsers:
         response = self.api_client.search_users(filters)
         assert response.ok
         assert response.json()
-        """
-        users = UserSchema().load(
-            response.json(), many=True, partial=True, transient=True
-        )
-        assert users
-        """
 
 
 class TestSensors:
@@ -59,21 +39,11 @@ class TestSensors:
         response = self.api_client.get_sensors()
         assert response.ok
         assert response.json()
-        """
-        sensors = SensorSchema().load(
-            response.json(), many=True, partial=True, transient=True
-        )
-        assert sensors
-        """
 
     def test_get_sensor_by_sn(self):
         response = self.api_client.get_sensor_by_sn(self.sensor_sn)
         assert response.ok
         assert response.json()
-        """
-        sensor = SensorSchema().load(response.json(), partial=True, transient=True)
-        assert sensor.sn == sensor_sn
-        """
 
     def test_search_sensors(self):
         filters = [{"field": "id", "op": "<", "value": 100}]
@@ -127,13 +97,6 @@ class TestSensorDiagnostics:
         response = self.api_client.search_sensor_diagnostics(filters)
         assert response.ok
         assert response.json()
-
-        """
-        sensor_diagnostics = SensorDiagnosticsSchema().load(
-            response.json(), many=True, partial=True, transient=True
-        )
-        assert sensor_diagnostics
-        """
 
     # TODO
     # def test_delete_sensor_diagnostics(self):
