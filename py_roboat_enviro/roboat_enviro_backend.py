@@ -52,12 +52,12 @@ class RoboatEnviroData(Consumer):
         """List all sensors."""
         return
 
-    @get("sensors/{sensor_id}")
-    def get_sensor_by_id(self, sensor_id: Path):
-        """Get sensor by ID.
+    @get("sensors/{sensor_sn}")
+    def get_sensor_by_sn(self, sensor_sn: Path):
+        """Get sensor by serial number.
 
         Args:
-            sensor_id (Path): [description]
+            sensor_sn (Path): [description]
         """
         return
 
@@ -67,6 +67,15 @@ class RoboatEnviroData(Consumer):
 
         Args:
             filters ([type]): [description]
+        """
+        return
+
+    @delete("sensors/{sensor_sn}")
+    def delete_sensor_by_sn(self, sensor_sn: Path):
+        """[summary]
+
+        Args:
+            sensor_sn (Path): [description]
         """
         return
 
@@ -89,6 +98,9 @@ class RoboatEnviroData(Consumer):
         """
         return
 
+    # TODO
+    # @delete("sensor_diagnostics/{id}")
+
     @json
     @post("sensor_logs")
     def add_sensor_logs(self, sensor_logs: Body):
@@ -107,6 +119,9 @@ class RoboatEnviroData(Consumer):
             filters ([type]): [description]
         """
         return
+
+    # TODO
+    # @delete("sensor_logs/{id}")
 
     @json
     @post("gps_measurements")
@@ -127,6 +142,9 @@ class RoboatEnviroData(Consumer):
         """
         return
 
+    # TODO
+    # @delete("gps_measurements/{id}")
+
     @multipart
     @post("spec_measurement_metadata")
     def add_spectroscopy_measurement_metadata(self, scan_file: Part, metadata: Field):
@@ -146,7 +164,15 @@ class RoboatEnviroData(Consumer):
         """
         return
 
-    # @returns.json(UserSchema)
+    @delete("spec_measurement_metadata/{filename}")
+    def delete_spec_measurement_metadata_by_filename(self, filename):
+        """Delete spectroscopy measurement and metadata by filename
+
+        Args:
+            filename (str): [description]
+        """
+        return
+
     @get("spec_measurements")
     def get_spec_measurement_filenames(self):
         """List all scan filenames."""
@@ -158,5 +184,14 @@ class RoboatEnviroData(Consumer):
 
         Args:
             filename (Path): [description]
+        """
+        return
+
+    @delete("spec_measurements/{filename}")
+    def delete_spec_spec_measurements_by_filename(self, filename):
+        """Delete spectroscopy measurements by filename
+
+        Args:
+            filename (str): [description]
         """
         return

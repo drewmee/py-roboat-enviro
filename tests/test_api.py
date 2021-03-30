@@ -1,83 +1,79 @@
 import json
-import random
-import string
 
 import pytest
 from roboat_enviro_backend import db
 from roboat_enviro_backend.schemas import SensorSchema, UserSchema
 
-sensor_sn = "0CR9CPZW1GJ3"
+from .utils import generate_random_name
 
 
-def generate_sample_set_UUID(length=36):
-    return "".join(
-        random.SystemRandom().choice(string.ascii_uppercase + string.digits)
-        for _ in range(length)
-    )
+def test_hehe():
+    assert 1 == 1
 
 
 class TestUsers:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, user_id):
         self.api_client = api_client
+        self.user_id = user_id
 
     def test_get_users(self):
         response = self.api_client.get_users()
         assert response.ok
         assert response.json()
+        """
         users = UserSchema().load(
             response.json(), many=True, partial=True, transient=True
         )
         assert users
+        """
 
     def test_get_user_by_id(self):
-        user_id = 1
-        response = self.api_client.get_user_by_id(user_id)
+        response = self.api_client.get_user_by_id(self.user_id)
         assert response.ok
         assert response.json()
         user = UserSchema().load(response.json(), partial=True, transient=True)
-        assert user.id == user_id
+        assert user.id == self.user_id
 
     def test_search_users(self):
-        filters = [{"field": "id", "op": "<", "value": 24}]
+        filters = [{"field": "id", "op": "<", "value": self.user_id + 1}]
         filters = json.dumps(filters)
         response = self.api_client.search_users(filters)
         assert response.ok
         assert response.json()
+        """
         users = UserSchema().load(
             response.json(), many=True, partial=True, transient=True
         )
         assert users
+        """
 
 
 class TestSensors:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, sensor_sn):
         self.api_client = api_client
-
-    def test_add_sensor(self):
-        nickname = "test-sensor1"
-        response = self.api_client.add_sensor(nickname)
-        assert response.ok
-        assert response.json()
+        self.sensor_sn = sensor_sn
 
     def test_get_sensors(self):
         response = self.api_client.get_sensors()
         assert response.ok
         assert response.json()
+        """
         sensors = SensorSchema().load(
             response.json(), many=True, partial=True, transient=True
         )
-        print(sensors)
         assert sensors
+        """
 
-    def test_get_sensor_by_id(self):
-        sensor_id = 1
-        response = self.api_client.get_sensor_by_id(sensor_id)
+    def test_get_sensor_by_sn(self):
+        response = self.api_client.get_sensor_by_sn(self.sensor_sn)
         assert response.ok
         assert response.json()
+        """
         sensor = SensorSchema().load(response.json(), partial=True, transient=True)
-        assert sensor.id == sensor_id
+        assert sensor.sn == sensor_sn
+        """
 
     def test_search_sensors(self):
         filters = [{"field": "id", "op": "<", "value": 100}]
@@ -85,22 +81,19 @@ class TestSensors:
         response = self.api_client.search_sensors(filters)
         assert response.ok
         assert response.json()
-        sensors = SensorSchema().load(
-            response.json(), many=True, partial=True, transient=True
-        )
-        assert sensors
 
 
 class TestSensorDiagnostics:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, sensor_sn):
         self.api_client = api_client
+        self.sensor_sn = sensor_sn
 
     def test_add_sensor_diagnostics(self):
         data = [
             {
                 "datetime_utc": "2021-03-27T18:01:45.398Z",
-                "sensor_sn": sensor_sn,
+                "sensor_sn": self.sensor_sn,
                 "cpu_temp": 0,
                 "gps_usb_conn": True,
                 "spec_usb_conn": True,
@@ -120,7 +113,7 @@ class TestSensorDiagnostics:
         assert response.ok
 
     def test_search_sensor_diagnostics(self):
-        filters = [{"field": "sensor_sn", "op": "=", "value": sensor_sn}]
+        filters = [{"field": "sensor_sn", "op": "=", "value": self.sensor_sn}]
         filters = json.dumps(filters)
         response = self.api_client.search_sensor_diagnostics(filters)
         assert response.ok
@@ -142,17 +135,21 @@ class TestSensorDiagnostics:
         assert sensor_diagnostics
         """
 
+    # TODO
+    # def test_delete_sensor_diagnostics(self):
+
 
 class TestSensorLogs:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, sensor_sn):
         self.api_client = api_client
+        self.sensor_sn = sensor_sn
 
     def test_add_sensor_logs(self):
         data = [
             {
                 "message": "string",
-                "sensor_sn": sensor_sn,
+                "sensor_sn": self.sensor_sn,
                 "func_name": "string",
                 "filename": "string",
                 "priority": "string",
@@ -165,7 +162,7 @@ class TestSensorLogs:
         assert response.ok
 
     def test_search_sensor_logs(self):
-        filters = [{"field": "sensor_sn", "op": "=", "value": sensor_sn}]
+        filters = [{"field": "sensor_sn", "op": "=", "value": self.sensor_sn}]
         filters = json.dumps(filters)
         response = self.api_client.search_sensor_logs(filters)
         assert response.ok
@@ -180,17 +177,21 @@ class TestSensorLogs:
         assert response.ok
         assert response.json()
 
+    # TODO
+    # def test_delete_sensor_diagnostics(self):
+
 
 class TestGPSMeasurements:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, sensor_sn):
         self.api_client = api_client
+        self.sensor_sn = sensor_sn
 
     def test_add_gps_measurements(self):
         data = [
             {
                 "datetime_utc": "2021-03-28T16:50:07.105Z",
-                "sensor_sn": sensor_sn,
+                "sensor_sn": self.sensor_sn,
                 "latitude": 42.360001,
                 "longitude": -71.092003,
             }
@@ -199,12 +200,11 @@ class TestGPSMeasurements:
         assert response.ok
 
     def test_search_gps_measurements(self):
-        filters = [{"field": "sensor_sn", "op": "=", "value": sensor_sn}]
+        filters = [{"field": "sensor_sn", "op": "=", "value": self.sensor_sn}]
         filters = json.dumps(filters)
         response = self.api_client.search_gps_measurements(filters)
         assert response.ok
         assert response.json()
-        print(response.json())
 
         filters = [
             {"field": "datetime_utc", "op": ">", "value": "2021-03-26"},
@@ -215,43 +215,44 @@ class TestGPSMeasurements:
         assert response.ok
         assert response.json()
 
+    # TODO
+    # def test_delete_gps_measurements(self):
+
 
 class TestSpectroscopyMeasurementMetadata:
     @pytest.fixture(autouse=True)
-    def setup(self, api_client):
+    def setup(self, api_client, sensor_sn):
         self.api_client = api_client
-
-    # def test_delete__spectroscopy_measurement_metadata(self):
+        self.sensor_sn = sensor_sn
 
     def test_add_spectroscopy_measurement_metadata(self):
         scan_file = open("tests/test.txt", "r")
         scan_data = scan_file.read()
         scan_file.close()
 
-        sample_set_UUID = generate_sample_set_UUID()
+        sample_set_UUID = generate_random_name(length=36)
         scan_type = "water_raman"
         scan_index = 1
         s3_filepath = "%s_%s%d.csv" % (sample_set_UUID, scan_type, scan_index)
         data = {
             "datetime_utc": "2021-03-28T16:50:51.201Z",
-            "sensor_sn": sensor_sn,
+            "sensor_sn": self.sensor_sn,
             "sample_set": sample_set_UUID,
             "scan_type": scan_type,
             "scan_index": scan_index,
             "s3_filepath": s3_filepath,
             "dilution_factor": 1,
-            "collected_by": "string",
-            "description": "string",
-            "comments": "string",
+            "collected_by": "Drew Meyers",
+            "description": "This is a description of the sample.",
+            "comments": "These are some additional comments about the sample.",
         }
         response = self.api_client.add_spectroscopy_measurement_metadata(
             scan_data, json.dumps(data)
         )
-        # print(response.json())
         assert response.ok
 
     def test_search_spectroscopy_measurement_metadata(self):
-        filters = [{"field": "sensor_sn", "op": "=", "value": sensor_sn}]
+        filters = [{"field": "sensor_sn", "op": "=", "value": self.sensor_sn}]
         filters = json.dumps(filters)
         response = self.api_client.search_spectroscopy_measurement_metadata(filters)
         assert response.ok
@@ -263,9 +264,11 @@ class TestSpectroscopyMeasurementMetadata:
         ]
         filters = json.dumps(filters)
         response = self.api_client.search_spectroscopy_measurement_metadata(filters)
-        print(response.json())
         assert response.ok
         assert response.json()
+
+    # TODO
+    # def test_delete_spectroscopy_measurement_metadata(self):
 
 
 class TestSpectroscopyMeasurements:
@@ -276,10 +279,9 @@ class TestSpectroscopyMeasurements:
     def test_get_spec_measurement_filenames(self):
         response = self.api_client.get_spec_measurement_filenames()
         assert response.ok
-        print(response.json())
 
     def test_get_spec_measurements_by_filename(self):
-        filename = "P3IK19EOB5AUF2UE3X4824OEJMATEZ56BCWY_water_raman1.csv"
+        response = self.api_client.get_spec_measurement_filenames()
+        filename = response.json()[0]["filename"]
         response = self.api_client.get_spec_measurements_by_filename(filename)
         assert response.ok
-        print(response.json())
