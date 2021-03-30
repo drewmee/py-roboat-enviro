@@ -31,3 +31,5 @@ jobs:
     - name: Test with pytest
       run: |
         pytest -v
+      env:
+        STAGING_API_KEY: ${{ secrets.STAGING_API_KEY }}
