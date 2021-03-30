@@ -240,8 +240,8 @@ class TestSpectroscopyMeasurements:
     def setup(self, api_client):
         self.api_client = api_client
 
-    def test_get_all_spec_measurement_filenames(self):
-        response = self.api_client.get_all_spec_measurement_filenames()
+    def test_get_spec_measurement_filenames(self):
+        response = self.api_client.get_spec_measurement_filenames()
         assert response.ok
 
     def test_get_spec_measurements_by_filename(self):

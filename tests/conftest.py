@@ -16,7 +16,7 @@ def cleanup(api_client):
         response = api_client.delete_sensor_by_sn(sn)
 
     # Delete all spec measurements
-    response = api_client.get_all_spec_measurement_filenames()
+    response = api_client.get_spec_measurement_filenames()
     for f in response.json():
         filename = f["filename"]
         response = api_client.delete_spec_spec_measurements_by_filename(filename)

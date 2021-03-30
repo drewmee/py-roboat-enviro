@@ -169,7 +169,7 @@ class RoboatEnviroData(Consumer):
         return
 
     @get("spec_measurements")
-    def get_all_spec_measurement_filenames(self):
+    def get_spec_measurement_filenames(self):
         """List all scan filenames."""
         return
 
