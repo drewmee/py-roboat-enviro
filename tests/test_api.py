@@ -171,7 +171,7 @@ class TestGPSMeasurements:
 
         filters = [
             {"field": "datetime_utc", "op": ">", "value": "2021-03-26"},
-            {"field": "datetime_utc", "op": "<", "value": "2021-03-29"},
+            {"field": "datetime_utc", "op": "<", "value": "2069-03-29"},
         ]
         filters = json.dumps(filters)
         response = self.api_client.search_gps_measurements(filters)
@@ -189,9 +189,10 @@ class TestSpectroscopyMeasurementMetadata:
         self.sensor_sn = sensor_sn
 
     def test_add_spectroscopy_measurement_metadata(self):
-        scan_file = open("tests/test.txt", "r")
-        scan_data = scan_file.read()
-        scan_file.close()
+        # scan_file = open("tests/test.txt", "r")
+        # scan_data = scan_file.read()
+        # scan_file.close()
+        scan_data = "This is the contents of a measurement file.".encode()
 
         sample_set_UUID = generate_random_name(length=36)
         scan_type = "water_raman"
@@ -239,8 +240,8 @@ class TestSpectroscopyMeasurements:
     def setup(self, api_client):
         self.api_client = api_client
 
-    def test_get_spec_measurement_filenames(self):
-        response = self.api_client.get_spec_measurement_filenames()
+    def test_get_all_spec_measurement_filenames(self):
+        response = self.api_client.get_all_spec_measurement_filenames()
         assert response.ok
 
     def test_get_spec_measurements_by_filename(self):
