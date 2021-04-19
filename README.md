@@ -1,6 +1,9 @@
 # py-roboat-enviro
 
 ![Test](https://github.com/drewmee/py-roboat-enviro/workflows/Test/badge.svg)
+[![Read the Docs](https://readthedocs.org/projects/py-roboat-enviro/badge/?version=latest)](https://py-roboat-enviro.readthedocs.io/)
+[![PyPi version](https://img.shields.io/pypi/v/py-roboat-enviro.svg 'pypi version')](https://pypi.org/project/py-roboat-enviro/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py-roboat-enviro.svg)](https://pypi.org/project/py-roboat-enviro/)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/py-roboat-enviro/blob/master/LICENSE)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
