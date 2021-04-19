@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import pytest
 
@@ -62,7 +63,7 @@ class TestSensorDiagnostics:
     def test_add_sensor_diagnostics(self):
         data = [
             {
-                "datetime_utc": "2021-03-27T18:01:45.398Z",
+                "datetime_utc": datetime.utcnow().isoformat()[:-3] + "Z",
                 "sensor_sn": self.sensor_sn,
                 "cpu_temp": 0,
                 "gps_usb_conn": True,
@@ -90,8 +91,8 @@ class TestSensorDiagnostics:
         assert response.json()
 
         filters = [
-            {"field": "datetime_utc", "op": ">", "value": "2021-03-26"},
-            {"field": "datetime_utc", "op": "<", "value": "2021-03-28"},
+            {"field": "datetime_utc", "op": ">", "value": "1969-03-26"},
+            {"field": "datetime_utc", "op": "<", "value": "2069-03-28"},
         ]
         filters = json.dumps(filters)
         response = self.api_client.search_sensor_diagnostics(filters)
@@ -118,7 +119,7 @@ class TestSensorLogs:
                 "priority": "string",
                 "line_num": 0,
                 "user": "string",
-                "datetime_utc": "2021-03-28T22:55:05.074Z",
+                "datetime_utc": datetime.utcnow().isoformat()[:-3] + "Z",
             }
         ]
         response = self.api_client.add_sensor_logs(data)
@@ -132,8 +133,8 @@ class TestSensorLogs:
         assert response.json()
 
         filters = [
-            {"field": "datetime_utc", "op": ">", "value": "2021-03-26"},
-            {"field": "datetime_utc", "op": "<", "value": "2021-03-29"},
+            {"field": "datetime_utc", "op": ">", "value": "1969-03-26"},
+            {"field": "datetime_utc", "op": "<", "value": "2069-03-29"},
         ]
         filters = json.dumps(filters)
         response = self.api_client.search_sensor_logs(filters)
@@ -153,7 +154,7 @@ class TestGPSMeasurements:
     def test_add_gps_measurements(self):
         data = [
             {
-                "datetime_utc": "2021-03-28T16:50:07.105Z",
+                "datetime_utc": datetime.utcnow().isoformat()[:-3] + "Z",
                 "sensor_sn": self.sensor_sn,
                 "latitude": 42.360001,
                 "longitude": -71.092003,
@@ -170,7 +171,7 @@ class TestGPSMeasurements:
         assert response.json()
 
         filters = [
-            {"field": "datetime_utc", "op": ">", "value": "2021-03-26"},
+            {"field": "datetime_utc", "op": ">", "value": "1969-03-26"},
             {"field": "datetime_utc", "op": "<", "value": "2069-03-29"},
         ]
         filters = json.dumps(filters)
@@ -189,17 +190,17 @@ class TestSpectroscopyMeasurementMetadata:
         self.sensor_sn = sensor_sn
 
     def test_add_spectroscopy_measurement_metadata(self):
-        # scan_file = open("tests/test.txt", "r")
-        # scan_data = scan_file.read()
-        # scan_file.close()
-        scan_data = "This is the contents of a measurement file.".encode()
+        scan_file = open("tests/sample_eem1.csv", "r")
+        scan_data = scan_file.read()
+        scan_file.close()
+        # scan_data = "This is the contents of a measurement file.".encode()
 
         sample_set_UUID = generate_random_name(length=36)
-        scan_type = "water_raman"
+        scan_type = "sample_eem"
         scan_index = 1
         s3_filepath = "%s_%s%d.csv" % (sample_set_UUID, scan_type, scan_index)
         data = {
-            "datetime_utc": "2021-03-28T16:50:51.201Z",
+            "datetime_utc": datetime.utcnow().isoformat()[:-3] + "Z",
             "sensor_sn": self.sensor_sn,
             "sample_set": sample_set_UUID,
             "scan_type": scan_type,

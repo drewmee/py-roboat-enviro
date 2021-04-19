@@ -46,7 +46,7 @@ def api_client(load_env):
     api = RoboatEnviroData(url, auth=token_auth)
     cleanup(api)
     yield api
-    cleanup(api)
+    # cleanup(api)
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -78,7 +78,8 @@ def sensor_sn(api_client):
     Yields:
         [type]: [description]
     """
-    nickname = generate_random_name(24)
-    response = api_client.add_sensor(nickname)
+    # nickname = generate_random_name(24)
+    nickname = "REMORA"
+    response = api_client.add_sensor(nickname=nickname)
     sn = response.json()["sn"]
     return sn

@@ -22,6 +22,13 @@ If you wish to build the local documentation or run unit tests, there are a few 
 
 pip install -e ".[docs, tests]"
 
+## Building docs locally
+make -C docs clean
+make -C docs html
+
+## Run tests locally
+pytest tests/test_api.py -s
+
 ## License
 
 This library is licensed under the MIT license. The full text of the license can be found in this repository at LICENSE.txt.

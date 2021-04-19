@@ -40,6 +40,11 @@ setuptools.setup(
         ],
         "tests": ["pytest>=6.0.1", "pytest-dotenv>=0.5.2", "tox>=3.16.1"],
         "develop": ["twine>=3.2.0", "pre-commit>=2.8.2"],
-        "jupyter": ["ipython>=7.16.1", "jupyter>=1.0.0", "jupyterlab>=2.2.2"],
+        "jupyter": [
+            "ipython>=7.16.1",
+            "jupyter>=1.0.0",
+            "jupyterlab>=2.2.2",
+            "pyeem>=0.2.0",
+        ],
     },
 )
